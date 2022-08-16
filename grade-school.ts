@@ -1,31 +1,60 @@
 
+export interface ISchoolDb {
+    gradeNumbr: string;
+    students: string[]
+}
+
 export class GradeSchool {
 
-    private schoolDb: Map<number, Array<string>> =
-        new Map([
-            [1, ["test"]],
-            [2, ["test2"]]
+    private schoolDb: Map<string, string[]>;
+
+    constructor() {
+        this.schoolDb = new Map([
+            ['colors', ['blue', 'red', 'green']],
+            ['languages', ['english', 'spanish', 'german']],
         ]);
+    }
 
     roster() {
-        return this.schoolDb;
+        return Object.fromEntries(this.schoolDb)
     }
 
-    add(grade: number, name: string) {
-        this.schoolDb.set(grade, ...[this.schoolDb.get(grade), name]);
-    }
+    // add(name: string, gradeNumber: number) {
+    //     let mygrade = this.schoolDb.find(g => g.gradeNumbr = gradeNumber);
 
-    grade() {
-        throw new Error('Remove this statement and implement this function')
-    }
+    //     if (!mygrade) {
+    //         this.schoolDb.push({ gradeNumbr: gradeNumber, students: [name] });
+    //     }
+    //     else {
+    //         this.schoolDb = this.schoolDb.map(g => {
+    //             if (g.gradeNumbr == gradeNumber) {
+    //                 return {
+    //                     gradeNumbr: g.gradeNumbr,
+    //                     students: [...g.students, name],
+    //                 }
+    //             }
+    //             else {
+    //                 return {
+    //                     gradeNumbr: g.gradeNumbr,
+    //                     students: g.students,
+    //                 }
+    //             }
+    //         });
+    //     }
+    // }
+
+    // grade(gradeNumbr: number) {
+    //     return this.schoolDb.find(g => g.gradeNumbr == gradeNumbr)?.students;
+    // }
 }
 
 
 let school = new GradeSchool();
 console.log(school.roster());
-school.add(1, "test3");
-console.log(school.roster());
-console.log('end');
+// school.add("zelafy", 1);
+// console.log(school.roster());
+// console.log(school.grade(3));
+
 
 
 
