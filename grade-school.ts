@@ -1,73 +1,61 @@
-interface SchoolGrade {
-    grade: string;
-    students: string[];
-}
-interface SchoolGrades {
-    items: SchoolGrade[];
-}
 
+
+export type Db = Map<string, number>
+export type Roster = { [key: number]: string[] }
 
 
 export class GradeSchool {
 
-    private schoolDb: Map<string, string[]>;
+    private db: Db;
 
     constructor() {
-        this.schoolDb = new Map<string, string[]>;
-        // this.schoolDb = new Map([
-        //     ['2', ['blue', 'red', 'green']],
-        //     ['3', ['english', 'spanish', 'german']],
-        // ]);
+        this.db = new Map();
     }
 
-    roster() {
-        let db: SchoolGrades
-        let items: SchoolGrade[] = [];
-        this.schoolDb.forEach((value: string[], key: string) => {
-            items.push(
-                {
-                    grade: key,
-                    students: value
-                });
-        })
-        db = {
-            items: items
+    roster(): Roster {
+        const roster: Roster = {};
+        this.db.forEach((grade, student) => {
+            if (roster[grade] == null)
+                roster[grade] = [];
+            roster[grade].push(student);
+        });
+
+        for (const studentArr of Object.values(roster)) {
+            studentArr.sort();
         }
-        return db.items;
+
+        return roster;
     }
 
-    // add(name: string, gradeNumber: number) {
-    //     let mygrade = this.schoolDb.find(g => g.gradeNumbr = gradeNumber);
+    add(name: string, grade: number) {
+        this.db.set(name, grade);
+    }
 
-    //     if (!mygrade) {
-    //         this.schoolDb.push({ gradeNumbr: gradeNumber, students: [name] });
-    //     }
-    //     else {
-    //         this.schoolDb = this.schoolDb.map(g => {
-    //             if (g.gradeNumbr == gradeNumber) {
-    //                 return {
-    //                     gradeNumbr: g.gradeNumbr,
-    //                     students: [...g.students, name],
-    //                 }
-    //             }
-    //             else {
-    //                 return {
-    //                     gradeNumbr: g.gradeNumbr,
-    //                     students: g.students,
-    //                 }
-    //             }
-    //         });
-    //     }
-    // }
-
-    // grade(gradeNumbr: number) {
-    //     return this.schoolDb.find(g => g.gradeNumbr == gradeNumbr)?.students;
-    // }
+    grade(gradeNumbr: number): string[] {
+        let students: string[] = [];
+        this.db.forEach((grade, student) => {
+            if (grade == gradeNumbr) {
+                students.push(student)
+            }
+        });
+        return students.sort();
+    }
 }
 
 
 let school = new GradeSchool();
+
 console.log(school.roster());
+
+school.add('ezeldin', 1);
+school.add('ahmed', 1);
+school.add('heba', 1);
+school.add('ibrahim', 2);
+school.add('ismail', 2);
+
+console.log(school.roster());
+console.log(school.grade(1));
+
 
 
 
