@@ -1,21 +1,75 @@
 export class Clock {
-    constructor(hour: unknown, minute?: unknown) {
-        throw new Error('Remove this statement and implement this function')
+  constructor(private hour: number, private minute?: number) {
+    this.hour = hour;
+    this.minute = minute == undefined ? 0 : minute;
+  }
+
+  public toString(): string {
+    this.calcClock(this.hour, this.minute!);
+    return `${this.pad(this.hour)}:${this.pad(this.minute!)}`;
+  }
+
+  public plus(minutes: number) {
+    this.minute = this.minute! + minutes;
+    this.calcClock(this.hour, this.minute);
+  }
+
+  public minus(minutes: number) {
+    this.minute = this.minute! - minutes;
+    this.calcClock(this.hour, this.minute);
+  }
+
+  public equals(other: unknown): unknown {
+    throw new Error('Remove this statement and implement this function');
+  }
+
+  calcClock(hour: number, minute: number) {
+    this.hour = hour % 24;
+    if (this.hour < 0) {
+      this.hour = this.hour + 24;
     }
 
-    public toString(): unknown {
-        throw new Error('Remove this statement and implement this function')
-    }
+    if (minute > 0) {
+      if (minute >= 60) {
+        let extraHours = (minute / 60) | 0;
+        this.hour = (this.hour + extraHours) % 24;
 
-    public plus(minutes: unknown): Clock {
-        throw new Error('Remove this statement and implement this function')
-    }
+        if (this.hour < 0) {
+          this.hour = this.hour + 24;
+        }
 
-    public minus(minutes: unknown): Clock {
-        throw new Error('Remove this statement and implement this function')
-    }
+        this.minute = minute % 60;
+      } else {
+        this.minute = minute % 60;
+      }
+    } else {
+      if (minute >= 60) {
+        let extraHours = (minute / 60) | 0;
+        this.hour = (this.hour + extraHours) % 24;
 
-    public equals(other: unknown): unknown {
-        throw new Error('Remove this statement and implement this function')
+        if (this.hour < 0) {
+          this.hour = this.hour + 24;
+        }
+
+        this.minute = minute % 60;
+        if (this.minute < 0) {
+          this.minute = this.minute + 60;
+        }
+      } else {
+        this.minute = minute % 60;
+        if (this.minute < 0) {
+          this.minute = this.minute + 60;
+        }
+      }
     }
+  }
+
+  pad(num: number): string {
+    let s = num + '';
+    while (s.length < 2) s = '0' + s;
+    return s;
+  }
 }
+
+const clock = new Clock(-1, -40);
+console.log(clock.toString());
