@@ -1,22 +1,39 @@
-
-export interface ISchoolDb {
-    gradeNumbr: string;
-    students: string[]
+interface SchoolGrade {
+    grade: string;
+    students: string[];
 }
+interface SchoolGrades {
+    items: SchoolGrade[];
+}
+
+
 
 export class GradeSchool {
 
     private schoolDb: Map<string, string[]>;
 
     constructor() {
-        this.schoolDb = new Map([
-            ['colors', ['blue', 'red', 'green']],
-            ['languages', ['english', 'spanish', 'german']],
-        ]);
+        this.schoolDb = new Map<string, string[]>;
+        // this.schoolDb = new Map([
+        //     ['2', ['blue', 'red', 'green']],
+        //     ['3', ['english', 'spanish', 'german']],
+        // ]);
     }
 
     roster() {
-        return Object.fromEntries(this.schoolDb)
+        let db: SchoolGrades
+        let items: SchoolGrade[] = [];
+        this.schoolDb.forEach((value: string[], key: string) => {
+            items.push(
+                {
+                    grade: key,
+                    students: value
+                });
+        })
+        db = {
+            items: items
+        }
+        return db.items;
     }
 
     // add(name: string, gradeNumber: number) {
@@ -51,9 +68,6 @@ export class GradeSchool {
 
 let school = new GradeSchool();
 console.log(school.roster());
-// school.add("zelafy", 1);
-// console.log(school.roster());
-// console.log(school.grade(3));
 
 
 
