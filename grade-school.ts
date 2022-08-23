@@ -1,32 +1,63 @@
-export interface schoolDb {
-  [key: number]: string[];
-}
+
+
+export type Db = Map<string, number>
+export type Roster = { [key: number]: string[] }
+
 
 export class GradeSchool {
-  private store: schoolDb;
 
-  constructor() {
-    this.store = {};
-  }
+    private db: Db;
 
-  roster(): schoolDb {
-    let newStore: schoolDb = {};
-    for (const [grade, students] of Object.entries(this.store)) {
-      newStore[parseInt(grade)] = students.slice();
+    constructor() {
+        this.db = new Map();
     }
-    return newStore;
-  }
 
-  add(name: string, gradeNumber: number) {
-    this.store[gradeNumber] = this.store[gradeNumber] || [];
-    this.store[gradeNumber].push(name);
-  }
+    roster(): Roster {
+        const roster: Roster = {};
+        this.db.forEach((grade, student) => {
+            if (roster[grade] == null)
+                roster[grade] = [];
+            roster[grade].push(student);
+        });
 
-  grade(gradeNumbr: number) {}
+        for (const studentArr of Object.values(roster)) {
+            studentArr.sort();
+        }
+
+        return roster;
+    }
+
+    add(name: string, grade: number) {
+        this.db.set(name, grade);
+    }
+
+    grade(gradeNumbr: number): string[] {
+        let students: string[] = [];
+        this.db.forEach((grade, student) => {
+            if (grade == gradeNumbr) {
+                students.push(student)
+            }
+        });
+        return students.sort();
+    }
 }
 
 let school = new GradeSchool();
+
 console.log(school.roster());
-school.add('zelafy', 1);
+
+school.add('ezeldin', 1);
+school.add('ahmed', 1);
+school.add('heba', 1);
+school.add('ibrahim', 2);
+school.add('ismail', 2);
+
 console.log(school.roster());
-// console.log(school.grade(3));
+console.log(school.grade(1));
+
+
+
+
+
+
+
